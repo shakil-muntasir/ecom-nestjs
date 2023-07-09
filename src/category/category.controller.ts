@@ -1,44 +1,52 @@
 import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Patch,
-  Delete,
-  HttpCode,
+    Controller,
+    Get,
+    Post,
+    Body,
+    Param,
+    Patch,
+    Delete,
+    HttpCode,
 } from '@nestjs/common';
 
 import { CategoryService } from './category.service';
-import { CreateDto } from './dto/create.dto';
+import { CreateCategoryDto } from './category.dto';
 
-@Controller()
+@Controller('/categories')
 export class CategoryController {
-  constructor(private readonly categoryService: CategoryService) {}
+    constructor(private readonly categoryService: CategoryService) {}
 
-  @Get('categories')
-  index() {
-    return this.categoryService.findAll();
-  }
+    @Get('/')
+    index() {
+        return this.categoryService.findAll();
+    }
 
-  @Post('categories')
-  store(@Body() categoryCreate: CreateDto) {
-    return this.categoryService.create(categoryCreate);
-  }
+    @Post('/')
+    store(@Body() createCategoryDto: CreateCategoryDto) {
+        return this.categoryService.create(createCategoryDto);
+    }
 
-  @Get('categories/:id')
-  show(@Param('id') id: number) {
-    return this.categoryService.findOne(id);
-  }
+    @Get('/:id')
+    show(@Param('id') id: number) {
+        return this.categoryService.findOne(id);
+    }
 
-  @Patch('categories/:id')
-  update(@Param('id') id: number, @Body() userCreate: CreateDto, ) {
-    return this.categoryService.update(id, userCreate);
-  }
+    @Patch('/:id')
+    update(
+        @Param('id') id: number,
+        @Body() createCategoryDto: CreateCategoryDto,
+    ) {
+        return this.categoryService.update(id, createCategoryDto);
+    }
 
-  @Delete('categories/:id')
-  @HttpCode(204)
-  destroy(@Param('id') id: number) {
-    return this.categoryService.delete(id);
-  }
+    @Delete('/:id')
+    @HttpCode(204)
+    destroy(@Param('id') id: number) {
+        return this.categoryService.delete(id);
+    }
+
+    @Get('/:id/products')
+    getCategory(@Param('id') id: number) {
+        return this.categoryService.getProducts(id);
+    }
 }

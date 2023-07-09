@@ -1,50 +1,52 @@
 import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Patch,
-  Delete,
-  HttpCode,
+    Controller,
+    Get,
+    Post,
+    Body,
+    Param,
+    Patch,
+    Delete,
+    HttpCode,
 } from '@nestjs/common';
 
 import { ProductService } from './product.service';
-import { CreateDto } from './dto/create.dto';
+import { CreateProductDto } from './product.dto';
 
-@Controller()
+@Controller('/products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+    constructor(private readonly productService: ProductService) {}
 
-  @Get('products')
-  index() {
-    return this.productService.findAll();
-  }
+    @Get('/')
+    index() {
+        return this.productService.findAll();
+    }
 
-  @Post('products')
-  store(@Body() productCreate: CreateDto) {
-    return this.productService.create(productCreate);
-  }
+    @Post('/')
+    store(@Body() createProductDto: CreateProductDto) {
+        return this.productService.create(createProductDto);
+    }
 
-  @Get('products/:id')
-  show(@Param('id') id: number) {
-    return this.productService.findOne(id);
-  }
+    @Get('/:id')
+    show(@Param('id') id: number) {
+        return this.productService.findOne(id);
+    }
 
-  @Patch('products/:id')
-  update(@Param('id') id: number, @Body() productCreate: CreateDto, ) {
-    return this.productService.update(id, productCreate);
-  }
+    @Patch('/:id')
+    update(
+        @Param('id') id: number,
+        @Body() createProductDto: CreateProductDto,
+    ) {
+        return this.productService.update(id, createProductDto);
+    }
 
-  @Delete('products/:id')
-  @HttpCode(204)
-  destroy(@Param('id') id: number) {
-    return this.productService.delete(id);
-  }
+    @Delete('/:id')
+    @HttpCode(204)
+    destroy(@Param('id') id: number) {
+        return this.productService.delete(id);
+    }
 
-  @Get('products/:id/category')
-  getCategory(@Param('id') id: number) {
-    
-    return this.productService.getCategory(id);
-  }
+    @Get('/:id/category')
+    getCategory(@Param('id') id: number) {
+        return this.productService.getCategory(id);
+    }
 }

@@ -3,24 +3,24 @@ import { Category } from 'src/category/category.entity';
 
 @Entity()
 export class Product {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column()
-  name: string;
+    @Column()
+    name: string;
 
-  @Column()
-  price: number;
+    @Column()
+    price: number;
 
-  @Column()
-  quantity: number;
+    @Column()
+    quantity: number;
 
-  @Column()
-  image: string;
+    @Column()
+    image: string;
 
-  @Column()
-  categoryId: number;
+    @Column()
+    categoryId: number;
 
-  @ManyToOne(() => Category, category => category.products)
-  category: Category
+    @ManyToOne(() => Category, (category) => category.products)
+    category: Category;
 }
