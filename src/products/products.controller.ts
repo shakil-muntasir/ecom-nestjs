@@ -9,26 +9,26 @@ import {
     HttpCode,
 } from '@nestjs/common';
 
-import { ProductService } from './product.service';
-import { CreateProductDto } from './product.dto';
+import { ProductsService } from './products.service';
+import { CreateProductDto } from './products.dto';
 
 @Controller('/products')
-export class ProductController {
-    constructor(private readonly productService: ProductService) {}
+export class ProductsController {
+    constructor(private readonly productsService: ProductsService) {}
 
     @Get('/')
     index() {
-        return this.productService.findAll();
+        return this.productsService.findAll();
     }
 
     @Post('/')
     store(@Body() createProductDto: CreateProductDto) {
-        return this.productService.create(createProductDto);
+        return this.productsService.create(createProductDto);
     }
 
     @Get('/:id')
     show(@Param('id') id: number) {
-        return this.productService.findOne(id);
+        return this.productsService.findOne(id);
     }
 
     @Patch('/:id')
@@ -36,17 +36,19 @@ export class ProductController {
         @Param('id') id: number,
         @Body() createProductDto: CreateProductDto,
     ) {
-        return this.productService.update(id, createProductDto);
+        return this.productsService.update(id, createProductDto);
     }
 
     @Delete('/:id')
     @HttpCode(204)
     destroy(@Param('id') id: number) {
-        return this.productService.delete(id);
+        this.productsService.delete(id);
+
+        return;
     }
 
     @Get('/:id/category')
     getCategory(@Param('id') id: number) {
-        return this.productService.getCategory(id);
+        return this.productsService.getCategory(id);
     }
 }

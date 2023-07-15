@@ -2,10 +2,10 @@ import { IsString, IsBoolean } from 'class-validator';
 
 export class CreateUserDto {
     @IsString()
-    firstName: string;
+    name: string;
 
     @IsString()
-    lastName: string;
+    email: string;
 
     @IsBoolean()
     isActive: boolean;

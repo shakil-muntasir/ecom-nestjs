@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
-import { CategoryModule } from './category/category.module';
-import { ProductModule } from './product/product.module';
+import { UsersModule } from './users/users.module';
+import { CategoriesModule } from './categories/categories.module';
+import { ProductsModule } from './products/products.module';
 
 import env from './configs/env';
 
@@ -18,11 +18,11 @@ import env from './configs/env';
             password: env.DB_PASSWORD,
             database: env.DB_DATABASE,
             autoLoadEntities: true,
-            synchronize: false,
+            synchronize: env.DB_SYNC,
         }),
-        UserModule,
-        CategoryModule,
-        ProductModule,
+        UsersModule,
+        CategoriesModule,
+        ProductsModule,
     ],
     controllers: [AppController],
     providers: [AppService],
