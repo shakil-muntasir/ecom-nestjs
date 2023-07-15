@@ -7,12 +7,15 @@ import {
     Patch,
     Delete,
     HttpCode,
+    UseGuards,
 } from '@nestjs/common';
 
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './categories.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('/categories')
+@UseGuards(AuthGuard)
 export class CategoriesController {
     constructor(private readonly categoriesService: CategoriesService) {}
 

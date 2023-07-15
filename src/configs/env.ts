@@ -7,6 +7,7 @@ export default cleanEnv(process.env, {
     DB_USERNAME: str({ default: 'postgres' }),
     DB_PASSWORD: str(),
     DB_DATABASE: str(),
-    DB_SYNC: bool({ default: false })
+    DB_SYNC: bool({ default: false }),
+    JWT_ACCESS_SECRET: str(),
+    JWT_REFRESH_SECRET: str(),
 });
- 

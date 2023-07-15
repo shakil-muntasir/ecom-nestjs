@@ -25,6 +25,10 @@ export class UsersService {
         return user;
     }
 
+    async findOneByEmail(email: string): Promise<User> {
+        return await this.usersRepository.findOneBy({ email });
+    }
+
     async create(createUserDto: CreateUserDto): Promise<User> {
         const user = this.usersRepository.create(createUserDto);
 
