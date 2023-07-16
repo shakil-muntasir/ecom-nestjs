@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 import { User } from './users.entity';
 import { CreateUserDto } from 'src/users/users.dto';
 
@@ -30,6 +31,8 @@ export class UsersService {
     }
 
     async create(createUserDto: CreateUserDto): Promise<User> {
+        createUserDto.password = await bcrypt.hash(createUserDto.password, 10);
+
         const user = this.usersRepository.create(createUserDto);
 
         return await this.usersRepository.save(user);
@@ -45,6 +48,8 @@ export class UsersService {
         user.name = createUserDto.name;
         user.email = createUserDto.email;
         user.isActive = createUserDto.isActive;
+        user.roles = createUserDto.roles;
+        user.password = await bcrypt.hash(createUserDto.password, 10);
 
         return await this.usersRepository.save(user);
     }

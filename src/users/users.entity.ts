@@ -7,6 +7,8 @@ import {
     UpdateDateColumn,
 } from 'typeorm';
 
+export type Role = 'admin' | 'manager' | 'employee' | 'customer';
+
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
@@ -24,6 +26,9 @@ export class User {
 
     @Column({ default: true })
     isActive: boolean;
+
+    @Column('text', { array: true, nullable: true })
+    roles: Role[];
 
     @CreateDateColumn({
         type: 'timestamp',

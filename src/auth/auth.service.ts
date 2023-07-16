@@ -53,10 +53,15 @@ export class AuthService {
         return await this.usersService.create(createUserDto);
     }
 
+    async getAuthUser(userId: number): Promise<User> {
+        return await this.usersService.findOne(userId);
+    }
+
     generateTokens(user: User): TokenPair {
         const payload = {
             id: user.id,
             email: user.email,
+            roles: user.roles,
         };
 
         const accessToken = jwt.sign(payload, env.JWT_ACCESS_SECRET, {

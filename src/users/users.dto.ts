@@ -1,4 +1,5 @@
-import { IsString, IsBoolean, IsEmail } from 'class-validator';
+import { IsArray, IsBoolean, IsEmail, IsString } from 'class-validator';
+import { Role } from 'src/users/users.entity';
 
 export class CreateUserDto {
     @IsString()
@@ -12,4 +13,7 @@ export class CreateUserDto {
 
     @IsBoolean()
     isActive: boolean;
+
+    @IsArray()
+    roles: Role[];
 }
