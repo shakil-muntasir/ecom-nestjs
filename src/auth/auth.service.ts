@@ -48,8 +48,6 @@ export class AuthService {
             throw new BadRequestException('User already exists.');
         }
 
-        createUserDto.password = await bcrypt.hash(createUserDto.password, 10);
-
         return await this.usersService.create(createUserDto);
     }
 

@@ -1,11 +1,14 @@
 import { Exclude } from 'class-transformer';
 import {
+    BeforeInsert,
+    BeforeUpdate,
     Column,
     CreateDateColumn,
     Entity,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 export type Role = 'admin' | 'manager' | 'employee' | 'customer';
 
@@ -44,4 +47,11 @@ export class User {
         nullable: true,
     })
     updatedAt: Date;
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    async hashPassword() {
+        const salt = await bcrypt.genSalt();
+        this.password = await bcrypt.hash(this.password, salt);
+    }
 }
