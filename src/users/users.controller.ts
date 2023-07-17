@@ -17,8 +17,8 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { RoleGuard } from 'src/auth/role.guard';
 
 @Controller('/users')
-@UseGuards(AuthGuard)
 @UseGuards(new RoleGuard(['admin']))
+@UseGuards(AuthGuard)
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
