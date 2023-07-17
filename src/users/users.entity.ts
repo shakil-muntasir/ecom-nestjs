@@ -1,7 +1,6 @@
 import { Exclude } from 'class-transformer';
 import {
     BeforeInsert,
-    BeforeUpdate,
     Column,
     CreateDateColumn,
     Entity,
@@ -49,7 +48,6 @@ export class User {
     updatedAt: Date;
 
     @BeforeInsert()
-    @BeforeUpdate()
     async hashPassword() {
         const salt = await bcrypt.genSalt();
         this.password = await bcrypt.hash(this.password, salt);
