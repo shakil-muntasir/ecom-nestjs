@@ -22,7 +22,7 @@ export class CategoriesController {
     constructor(private readonly categoriesService: CategoriesService) {}
 
     @Get('/')
-    @UseGuards(new RoleGuard(['admin', 'manager', 'employee']))
+    @UseGuards(new RoleGuard(['admin', 'manager', 'employee', 'customer']))
     index() {
         return this.categoriesService.findAll();
     }

@@ -24,7 +24,7 @@ export class ProductsController {
     constructor(private readonly productsService: ProductsService) {}
 
     @Get('/')
-    @UseGuards(new RoleGuard(['admin', 'manager', 'employee']))
+    @UseGuards(new RoleGuard(['admin', 'manager', 'employee', 'customer']))
     index(@Request() { user }: { user: UserRequest }) {
         return this.productsService.findAll();
     }

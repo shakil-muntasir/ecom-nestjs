@@ -6,9 +6,10 @@ import {
     Entity,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
+    OneToMany,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-
+import { Order } from 'src/orders/order.entity';
 export type Role = 'admin' | 'manager' | 'employee' | 'customer';
 
 @Entity()
@@ -52,4 +53,8 @@ export class User {
         const salt = await bcrypt.genSalt();
         this.password = await bcrypt.hash(this.password, salt);
     }
+
+    @OneToMany(() => Order, (order) => order.user)
+    orders: Order[];
+    
 }

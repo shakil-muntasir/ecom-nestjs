@@ -7,7 +7,11 @@ import { UsersModule } from './users/users.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ProductsModule } from './products/products.module';
 import { AuthModule } from './auth/auth.module';
-
+import { OrdersService } from './orders/orders.service';
+import { OrdersController } from './orders/orders.controller';
+import { UsersController } from './users/users.controller';
+import { OrderRepository } from './orders/order.repository';
+import { Order } from './orders/order.entity';
 import env from './configs/env';
 
 @Module({
@@ -26,14 +30,17 @@ import env from './configs/env';
         CategoriesModule,
         ProductsModule,
         AuthModule,
+        TypeOrmModule.forFeature([Order,OrderRepository]),
     ],
-    controllers: [AppController],
+    
+    controllers: [AppController, UsersController, OrdersController],
     providers: [
         {
             provide: APP_INTERCEPTOR,
             useClass: ClassSerializerInterceptor,
         },
         AppService,
+        OrdersService,
     ],
 })
 export class AppModule {}

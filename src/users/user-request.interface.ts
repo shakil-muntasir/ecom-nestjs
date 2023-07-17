@@ -4,4 +4,5 @@ export interface UserRequest {
     id: number;
     email: string;
     roles: Role[];
+    order: number;
 }
