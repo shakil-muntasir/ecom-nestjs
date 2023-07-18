@@ -7,6 +7,7 @@ import { CreateProductDto } from 'src/products/products.dto';
 
 @Injectable()
 export class ProductsService {
+    findOneBy: any;
     constructor(
         @InjectRepository(Product)
         private productRepository: Repository<Product>,

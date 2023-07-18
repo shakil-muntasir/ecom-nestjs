@@ -1,21 +1,20 @@
-import { IsInt, IsNumber, IsString, Min } from 'class-validator';
-import { User } from 'src/users/users.entity';
+import { IsArray, IsBoolean, IsNumber, IsEmail, IsString} from 'class-validator';
 import { ManyToOne } from 'typeorm';
-
-export class CreateOrderDto {
-    @IsInt()
-    productId: number;
-
-    @IsString()
-    productName: string;
-
-    @IsInt()
-    @Min(1)
+export interface OrderedProduct {
+    id: number;
     quantity: number;
-
-    @IsNumber()
-    totalPrice: number;
-
-    @ManyToOne(() => User, (user) => user.orders)
-    user: User;
+  }
+  
+  export type DeliveryOption = 'shop pickup' | 'home delivery';
+  
+  export class CreateOrderDto {
+    [x: string]: any;
+    
+    userId: number;
+    orderedProducts: OrderedProduct[]
+    deliveryOption: DeliveryOption
+    address: string
+    phone: string
+    isDelivered: boolean;
+    
 }

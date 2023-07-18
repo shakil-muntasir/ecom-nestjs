@@ -5,12 +5,14 @@ import {
     ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
-    OneToMany,
+    ManyToMany,
+    OneToMany
 } from 'typeorm';
 import { Category } from 'src/categories/categories.entity';
-import { Order } from 'src/orders/order.entity';
+// import { Order } from 'src/orders/order.entity';
 @Entity()
 export class Product {
+    [x: string]: any;
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -46,8 +48,7 @@ export class Product {
         nullable: true,
     })
     updatedAt: Date;
-    
-    @OneToMany(() => Order, order => order.product)
-    orders: Order[];
+   
+
 }
 

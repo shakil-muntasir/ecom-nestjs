@@ -9,7 +9,7 @@ import {
     OneToMany,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { Order } from 'src/orders/order.entity';
+// import { Order } from 'src/orders/order.entity';
 export type Role = 'admin' | 'manager' | 'employee' | 'customer';
 
 @Entity()
@@ -54,7 +54,7 @@ export class User {
         this.password = await bcrypt.hash(this.password, salt);
     }
 
-    @OneToMany(() => Order, (order) => order.user)
-    orders: Order[];
+    // @OneToMany(() => Order, (order) => order.user)
+    // orders: Order[];
     
 }
