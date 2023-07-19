@@ -12,6 +12,9 @@ import { Category } from 'src/categories/categories.entity';
 // import { Order } from 'src/orders/order.entity';
 @Entity()
 export class Product {
+    static id(id: any) {
+        throw new Error('Method not implemented.');
+    }
     [x: string]: any;
     @PrimaryGeneratedColumn()
     id: number;

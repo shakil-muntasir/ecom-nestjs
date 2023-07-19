@@ -1,8 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Product } from 'src/products/products.entity';
 
-
-
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn()
@@ -10,6 +8,9 @@ export class Order {
 
   @Column()
   userId: number;
+
+  @Column({ default: false }) 
+  discount: boolean;
 
   @Column('decimal')
   totalPrice: number;

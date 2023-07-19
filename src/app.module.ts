@@ -11,6 +11,8 @@ import { OrdersModule } from './orders/orders.module';
 import { OrdersController } from './orders/orders.controller';
 import { UsersController } from './users/users.controller';
 import { Order } from './orders/orders.entity';
+import { DiscountModule } from './discounts/discounts.module';
+
 import env from './configs/env';
 
 @Module({
@@ -29,7 +31,9 @@ import env from './configs/env';
         CategoriesModule,
         ProductsModule,
         AuthModule,
-        OrdersModule
+        OrdersModule,
+        DiscountModule,
+        
     ],
     
     controllers: [AppController,  UsersController],

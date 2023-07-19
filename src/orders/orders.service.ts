@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from './orders.entity';
@@ -17,7 +17,6 @@ export class OrdersService {
 
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
     let totalPrice = 0;
-
     const orderedProducts = [];
 
     for (const orderedProduct of createOrderDto.orderedProducts) {
@@ -27,7 +26,14 @@ export class OrdersService {
         throw new NotFoundException(`Product with id ${orderedProduct.id} not found`);
       }
 
-      totalPrice += product.price * orderedProduct.quantity;
+    
+      if (createOrderDto.discount) {
+        
+        const discountedPrice = (product.price * (100 - createOrderDto.discount)) / 100;
+        totalPrice += discountedPrice * orderedProduct.quantity;
+      } else {
+        totalPrice += product.price * orderedProduct.quantity;
+      }
 
       orderedProducts.push(product);
     }
@@ -50,7 +56,6 @@ export class OrdersService {
     return order;
   }
   async findOrdersByUser(userId: number, currentUser: User): Promise<Order[]> {
-    // Check if the authenticated user is the same as the one whose orders are being retrieved
     if (currentUser.id !== userId) {
       throw new ForbiddenException('You are not allowed to view other users\' orders.');
     }

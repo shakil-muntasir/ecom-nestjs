@@ -3,6 +3,7 @@ import { ManyToOne } from 'typeorm';
 export interface OrderedProduct {
     id: number;
     quantity: number;
+    discount: boolean;
   }
   
   export type DeliveryOption = 'shop pickup' | 'home delivery';
