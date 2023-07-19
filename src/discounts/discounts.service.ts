@@ -39,7 +39,7 @@ export class DiscountsService {
     return this.discountRepository.find();
    }
     async findOneBy(id: number): Promise<Discount> {
-    const discount = await this.discountRepository.findOne({ id });
+    const discount = await this.discountRepository.findOneBy({ id });
     if (!discount) {
       throw new NotFoundException(`Discount with id ${id} not found`);
     }
@@ -57,5 +57,5 @@ export class DiscountsService {
     const discount = await this.findOneBy(id);
     return this.discountRepository.remove(discount);
   }
-  
+
 }
