@@ -5,17 +5,12 @@ import {
     ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
-    ManyToMany,
-    OneToMany
 } from 'typeorm';
 import { Category } from 'src/categories/categories.entity';
-// import { Order } from 'src/orders/order.entity';
-@Entity()
+import { Discount } from 'src/discounts/discounts.entity';
+
+@Entity('products')
 export class Product {
-    static id(id: any) {
-        throw new Error('Method not implemented.');
-    }
-    [x: string]: any;
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -37,6 +32,9 @@ export class Product {
     @ManyToOne(() => Category, (category) => category.products)
     category: Category;
 
+    @ManyToOne(() => Discount, (discount) => discount.products)
+    discount: Discount;
+
     @CreateDateColumn({
         type: 'timestamp',
         default: () => 'CURRENT_TIMESTAMP',
@@ -51,7 +49,4 @@ export class Product {
         nullable: true,
     })
     updatedAt: Date;
-   
-
 }
-

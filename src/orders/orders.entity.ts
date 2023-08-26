@@ -1,48 +1,52 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { Product } from 'src/products/products.entity';
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    CreateDateColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 
-@Entity()
+@Entity('orders')
 export class Order {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column()
-  userId: number;
+    @Column()
+    userId: number;
 
-  @Column({ default: false }) 
-  discount: boolean;
+    @Column({ default: false })
+    discount: boolean;
 
-  @Column('decimal')
-  totalPrice: number;
+    @Column('decimal')
+    totalPrice: number;
 
-  @Column()
-  deliveryOption: string;
+    @Column()
+    deliveryOption: string;
 
-  @Column()
-  address: string;
+    @Column()
+    address: string;
 
-  @Column()
-  phone: string;
+    @Column()
+    phone: string;
 
-  @Column({ type: 'json', nullable: true })
-  orderedProducts: any[];
+    @Column({ type: 'json', nullable: true })
+    orderedProducts: any[];
 
-  @Column({ default: false }) 
-  isDelivered: boolean;
+    @Column({ default: false })
+    isDelivered: boolean;
 
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    nullable: true,
-  })
-  createdAt: Date;
+    @CreateDateColumn({
+        type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP',
+        nullable: true,
+    })
+    createdAt: Date;
 
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
-    nullable: true,
-  })
-  updatedAt: Date;
+    @UpdateDateColumn({
+        type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP',
+        onUpdate: 'CURRENT_TIMESTAMP',
+        nullable: true,
+    })
+    updatedAt: Date;
 }
-

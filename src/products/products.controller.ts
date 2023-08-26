@@ -6,7 +6,6 @@ import {
     Param,
     Patch,
     Post,
-    Request,
     HttpCode,
     HttpStatus,
     UseGuards,
@@ -14,9 +13,8 @@ import {
 
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './products.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard, SkipAuthGuard } from 'src/auth/auth.guard';
 import { RoleGuard } from 'src/auth/role.guard';
-import { UserRequest } from 'src/users/user-request.interface';
 
 @Controller('/products')
 @UseGuards(AuthGuard)
@@ -24,8 +22,8 @@ export class ProductsController {
     constructor(private readonly productsService: ProductsService) {}
 
     @Get('/')
-    @UseGuards(new RoleGuard(['admin', 'manager', 'employee', 'customer']))
-    index(@Request() { user }: { user: UserRequest }) {
+    @SkipAuthGuard()
+    index() {
         return this.productsService.findAll();
     }
 
