@@ -13,7 +13,7 @@ import {
 
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './categories.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard, SkipAuthGuard } from 'src/auth/auth.guard';
 import { RoleGuard } from 'src/auth/role.guard';
 
 @Controller('/categories')
@@ -22,7 +22,7 @@ export class CategoriesController {
     constructor(private readonly categoriesService: CategoriesService) {}
 
     @Get('/')
-    @UseGuards(new RoleGuard(['admin', 'manager', 'employee', 'customer']))
+    @SkipAuthGuard()
     index() {
         return this.categoriesService.findAll();
     }
@@ -34,7 +34,7 @@ export class CategoriesController {
     }
 
     @Get('/:id')
-    @UseGuards(new RoleGuard(['admin', 'manager', 'employee']))
+    @SkipAuthGuard()
     show(@Param('id') id: number) {
         return this.categoriesService.findOne(id);
     }
@@ -58,7 +58,7 @@ export class CategoriesController {
     }
 
     @Get('/:id/products')
-    @UseGuards(new RoleGuard(['admin', 'manager', 'employee']))
+    @SkipAuthGuard()
     getCategory(@Param('id') id: number) {
         return this.categoriesService.getProducts(id);
     }

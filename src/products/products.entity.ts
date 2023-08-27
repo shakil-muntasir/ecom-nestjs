@@ -23,6 +23,9 @@ export class Product {
     @Column()
     quantity: number;
 
+    @Column({ type: 'text' })
+    description: string;
+
     @Column({ nullable: true })
     image: string;
 

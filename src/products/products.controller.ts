@@ -34,7 +34,7 @@ export class ProductsController {
     }
 
     @Get('/:id')
-    @UseGuards(new RoleGuard(['admin', 'manager', 'employee']))
+    @SkipAuthGuard()
     show(@Param('id') id: number) {
         return this.productsService.findOne(id);
     }
