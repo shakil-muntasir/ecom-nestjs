@@ -46,6 +46,7 @@ export class ProductsService {
         product.name = createProductDto.name;
         product.price = createProductDto.price;
         product.quantity = createProductDto.quantity;
+        product.description = createProductDto.description;
         product.image = createProductDto.image;
         product.categoryId = createProductDto.categoryId;
 
