@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
     Entity,
     PrimaryGeneratedColumn,
@@ -30,6 +31,7 @@ export class Order {
     phone: string;
 
     @Column({ type: 'json', nullable: true })
+    @Exclude({ toPlainOnly: true })
     orderedProducts: any[];
 
     @Column({ default: false })

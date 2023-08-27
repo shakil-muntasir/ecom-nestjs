@@ -23,7 +23,10 @@ import { User } from 'src/users/users.entity';
 @Controller('/orders')
 @UseGuards(AuthGuard)
 export class OrdersController {
-    constructor(private readonly orderService: OrdersService) {}
+    constructor(
+        private readonly orderService: OrdersService,
+        private readonly productService: ProductsService,
+    ) {}
 
     @Post('/')
     @UseGuards(new RoleGuard(['admin', 'manager', 'employee', 'customer']))
@@ -34,7 +37,20 @@ export class OrdersController {
     @Get('/')
     @UseGuards(new RoleGuard(['admin', 'manager', 'employee']))
     async findAll() {
-        return this.orderService.findAll();
+        const orders = (await this.orderService.findAll()) as any;
+
+        let products = [];
+
+        for (const order of orders) {
+            for (const productId of order.orderedProducts) {
+                const product = await this.productService.findOne(productId);
+                products.push(product);
+            }
+            order.products = products;
+            products = [];
+        }
+
+        return orders;
     }
     @Get('/:id')
     @UseGuards(new RoleGuard(['admin', 'manager', 'employee']))
