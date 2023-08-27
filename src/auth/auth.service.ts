@@ -39,7 +39,7 @@ export class AuthService {
         return this.generateTokens(user);
     }
 
-    async signUp(createUserDto: CreateUserDto): Promise<User> {
+    async signUp(createUserDto: CreateUserDto): Promise<TokenPair> {
         const userExists = await this.usersService.findOneByEmail(
             createUserDto.email,
         );
@@ -48,7 +48,9 @@ export class AuthService {
             throw new BadRequestException('User already exists.');
         }
 
-        return await this.usersService.create(createUserDto);
+        const user = await this.usersService.create(createUserDto);
+
+        return this.generateTokens(user);
     }
 
     async getAuthUser(userId: number): Promise<User> {

@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+    ForbiddenException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from './orders.entity';
@@ -9,76 +13,58 @@ import { User } from 'src/users/users.entity';
 
 @Injectable()
 export class OrdersService {
-  constructor(
-    @InjectRepository(Order)
-    private orderRepository: Repository<Order>,
-    private productService: ProductsService,
-  ) {}
+    constructor(
+        @InjectRepository(Order)
+        private orderRepository: Repository<Order>,
+        private productService: ProductsService,
+    ) {}
 
-  async create(createOrderDto: CreateOrderDto): Promise<Order> {
-    let totalPrice = 0;
-    const orderedProducts = [];
-
-    for (const orderedProduct of createOrderDto.orderedProducts) {
-      const product = await this.productService.findOne(orderedProduct.id);
-
-      if (!product) {
-        throw new NotFoundException(`Product with id ${orderedProduct.id} not found`);
-      }
-
-    
-      if (createOrderDto.discount) {
-        
-        const discountedPrice = (product.price * (100 - createOrderDto.discount)) / 100;
-        totalPrice += discountedPrice * orderedProduct.quantity;
-      } else {
-        totalPrice += product.price * orderedProduct.quantity;
-      }
-
-      orderedProducts.push(product);
+    async create(createOrderDto: CreateOrderDto): Promise<Order> {
+        const order = this.orderRepository.create(createOrderDto);
+        return this.orderRepository.save(order);
+    }
+    async findAll(): Promise<Order[]> {
+        return this.orderRepository.find();
     }
 
-    createOrderDto.totalPrice = totalPrice;
-    createOrderDto.orderedProducts = orderedProducts;
+    async findOneBy(id: number): Promise<Order> {
+        const order = await this.orderRepository.findOneBy({ id });
+        if (!order) {
+            throw new NotFoundException(`Order with id ${id} not found`);
+        }
+        return order;
+    }
+    async findOrdersByUser(
+        userId: number,
+        currentUser: User,
+    ): Promise<Order[]> {
+        if (currentUser.id !== userId) {
+            throw new ForbiddenException(
+                "You are not allowed to view other users' orders.",
+            );
+        }
 
-    const order = this.orderRepository.create(createOrderDto);
-    return this.orderRepository.save(order);
-  }
-  async findAll(): Promise<Order[]> {
-    return this.orderRepository.find();
-  }
+        const orders = await this.orderRepository.find({ where: { userId } });
+        if (!orders || orders.length === 0) {
+            throw new NotFoundException(
+                `No orders found for user with ID ${userId}`,
+            );
+        }
 
-  async findOneBy(id: number): Promise<Order> {
-    const order = await this.orderRepository.findOneBy({id});
-    if (!order) {
-      throw new NotFoundException(`Order with id ${id} not found`);
+        return orders;
     }
-    return order;
-  }
-  async findOrdersByUser(userId: number, currentUser: User): Promise<Order[]> {
-    if (currentUser.id !== userId) {
-      throw new ForbiddenException('You are not allowed to view other users\' orders.');
+    async update(id: number, updateOrderDto: CreateOrderDto): Promise<Order> {
+        const order = await this.findOneBy(id);
+        updateOrderDto.createdAt = order.createdAt;
+        const updatedOrder = {
+            ...order,
+            ...updateOrderDto,
+        };
+
+        return this.orderRepository.save(updatedOrder);
     }
-  
-    const orders = await this.orderRepository.find({ where: { userId } });
-    if (!orders || orders.length === 0) {
-      throw new NotFoundException(`No orders found for user with ID ${userId}`);
+    async remove(id: number): Promise<Order> {
+        const order = await this.findOneBy(id);
+        return this.orderRepository.remove(order);
     }
-  
-    return orders;
-  }
-  async update(id: number, updateOrderDto: CreateOrderDto): Promise<Order> {
-    const order = await this.findOneBy(id);
-    updateOrderDto.createdAt = order.createdAt;
-    const updatedOrder = {
-      ...order,
-      ...updateOrderDto,
-    };
-  
-    return this.orderRepository.save(updatedOrder);
-  }
-  async remove(id: number): Promise<Order> {
-    const order = await this.findOneBy(id);
-    return this.orderRepository.remove(order);
-  }
 }
