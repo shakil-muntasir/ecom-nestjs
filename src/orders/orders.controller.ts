@@ -55,7 +55,18 @@ export class OrdersController {
     @Get('/:id')
     @UseGuards(new RoleGuard(['admin', 'manager', 'employee']))
     async findOne(@Param('id') id: number) {
-        return this.orderService.findOneBy(id);
+        const order = (await this.orderService.findOneBy(id)) as any;
+
+        let products = [];
+
+        for (const productId of order.orderedProducts) {
+            const product = await this.productService.findOne(productId);
+            products.push(product);
+        }
+        order.products = products;
+        products = [];
+
+        return order;
     }
 
     @Get('/user/:userId')
