@@ -52,6 +52,7 @@ export class OrdersController {
 
         return orders;
     }
+    
     @Get('/:id')
     @UseGuards(new RoleGuard(['admin', 'manager', 'employee']))
     async findOne(@Param('id') id: number) {
@@ -80,8 +81,47 @@ export class OrdersController {
         const orders = await this.orderService.findOrdersByUser(
             userId,
             currentUser,
-        );
+        ) as any;
+
+        let products = [];
+
+        for (const order of orders) {
+            for (const productId of order.orderedProducts) {
+                const product = await this.productService.findOne(productId);
+                products.push(product);
+            }
+            order.products = products;
+            products = [];
+        }
+
         return orders;
+    }
+
+    @Get('/user/:userId/:orderId')
+    @UseGuards(new RoleGuard(['admin', 'manager', 'employee', 'customer']))
+    async getUserOrder(
+        @Param('userId', ParseIntPipe) userId: number,
+        @Param('orderId', ParseIntPipe) orderId: number,
+        @Request() request: Request,
+    ) {
+        const currentUser: User = request['user'];
+
+        const order = await this.orderService.findOrderByUser(
+            userId,
+            orderId,
+            currentUser,
+        ) as any;
+
+        let products = [];
+
+        for (const productId of order.orderedProducts) {
+            const product = await this.productService.findOne(productId);
+            products.push(product);
+        }
+        order.products = products;
+        products = [];
+
+        return order;
     }
 
     @Patch('/:id')

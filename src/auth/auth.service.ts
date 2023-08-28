@@ -65,7 +65,7 @@ export class AuthService {
         };
 
         const accessToken = jwt.sign(payload, env.JWT_ACCESS_SECRET, {
-            expiresIn: '15m',
+            expiresIn: '1h',
         });
         const refreshToken = jwt.sign(payload, env.JWT_REFRESH_SECRET, {
             expiresIn: '7d',

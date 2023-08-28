@@ -38,13 +38,19 @@ export class OrdersService {
         userId: number,
         currentUser: User,
     ): Promise<Order[]> {
-        if (currentUser.id !== userId) {
-            throw new ForbiddenException(
-                "You are not allowed to view other users' orders.",
-            );
+        let orders: Order[] = [];
+        
+        if (currentUser.roles.includes('admin') ) {
+           orders = await this.orderRepository.find();
+        } else {
+            if(currentUser.id !== userId) {
+                throw new ForbiddenException(
+                    "You are not allowed to view other users' orders.",
+                );
+            }
+            orders = await this.orderRepository.find({ where: { userId } });
         }
 
-        const orders = await this.orderRepository.find({ where: { userId } });
         if (!orders || orders.length === 0) {
             throw new NotFoundException(
                 `No orders found for user with ID ${userId}`,
@@ -53,6 +59,32 @@ export class OrdersService {
 
         return orders;
     }
+
+    async findOrderByUser(
+        userId: number,
+        orderId: number,
+        currentUser: User,
+    ): Promise<Order> {
+        let order: Order = null;
+        if (currentUser.roles.includes('admin')) {
+           order = await this.orderRepository.findOneBy({ id: orderId });
+        } else {
+            if(currentUser.id !== userId) {
+                throw new ForbiddenException(
+                    "You are not allowed to view other users' orders.",
+                );
+            }
+            order = await this.orderRepository.findOneBy({ id: orderId, userId });
+        }
+        if (!order) {
+            throw new NotFoundException(
+                `No orders found for user with ID ${userId}`,
+            );
+        }
+
+        return order;
+    }
+
     async update(id: number, updateOrderDto: CreateOrderDto): Promise<Order> {
         const order = await this.findOneBy(id);
         updateOrderDto.createdAt = order.createdAt;
